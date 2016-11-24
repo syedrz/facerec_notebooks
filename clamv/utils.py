@@ -17,7 +17,6 @@ def get_images(color=False):
   return X, y
 
 def test(model, X, y, f='accuracy', k=10):
-  print('in')
   results = cross_val_score(model, X, y, scoring=f, cv=k)
 
   return np.mean(results), np.std(results)
