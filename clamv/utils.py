@@ -5,21 +5,21 @@ import matplotlib.pyplot as plt
 
 
 def get_images(color=False):
-  d = fetch_lfw_people(color=color, min_faces_per_person=70, resize=1)
+    d = fetch_lfw_people(color=color, min_faces_per_person=70, resize=1)
 
-  if color:
+    if color:
     X = d.images
-  else:
+    else:
     X = d.data
 
-  y = d.target
+    y = d.target
 
-  return X, y
+    return X, y
 
 def test(model, X, y, f='accuracy', k=10):
-  results = cross_val_score(model, X, y, scoring=f, cv=k)
+    results = cross_val_score(model, X, y, scoring=f, cv=k)
 
-  return np.mean(results), np.std(results)
+    return np.mean(results), np.std(results)
 
 def show(img, *args, **kwargs):
-  plt.imshow(img.astype(np.uint8), *args, **kwargs)
+    plt.imshow(img.astype(np.uint8), *args, **kwargs)
