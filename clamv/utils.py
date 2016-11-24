@@ -8,9 +8,9 @@ def get_images(color=False):
     d = fetch_lfw_people(color=color, min_faces_per_person=70, resize=1)
 
     if color:
-    X = d.images
+        X = d.images
     else:
-    X = d.data
+        X = d.data
 
     y = d.target
 
