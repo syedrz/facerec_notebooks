@@ -13,6 +13,3 @@ class OpenCVClassifier(BaseEstimator, ClassifierMixin):
 
     def predict(self, X):
         return np.array(list(map(self.recognizer.predict, X)))
-
-    def get_params(deep=True):
-        return {'get_recognizer': self.get_recognizer}
