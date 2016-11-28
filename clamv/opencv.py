@@ -12,4 +12,14 @@ class OpenCVClassifier(BaseEstimator, ClassifierMixin):
         return self
 
     def predict(self, X):
-        return np.array(list(map(self.recognizer.predict, X)))
+        predicted = []
+        
+        for x in X:
+            y = self.recognizer.predict(x)
+
+            if type(y) is tuple:
+                predicted.append(y[0])
+            else:
+                predicted.append(y)
+
+        return np.array(predicted)
