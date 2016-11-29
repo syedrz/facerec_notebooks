@@ -8,6 +8,8 @@ import time
 import warnings
 
 
+DATA_FOLDER = 'data/'
+
 def get_images(color=False, min_faces_per_person=70):
     d = fetch_lfw_people(color=color, min_faces_per_person=min_faces_per_person, resize=1)
 
@@ -21,7 +23,7 @@ def get_images(color=False, min_faces_per_person=70):
     return X, y
 
 def score(filename, metric, *args, **kwargs):
-    D = np.load(filename + '.npy')
+    D = np.load(DATA_FOLDER + filename + '.npy')
 
     results = []
 
@@ -32,7 +34,7 @@ def score(filename, metric, *args, **kwargs):
 
 def test(model, X, y, filename, k=10):
     start = time.time()
-    print('start: ', start)
+    print(time.ctime(start))
 
     results = []
 
@@ -49,7 +51,7 @@ def test(model, X, y, filename, k=10):
 
     print('duration:', time.time() - start)
 
-    np.save(filename, results)
+    np.save(DATA_FOLDER + filename + '.npy', results)
 
     return score(filename, accuracy_score)
 
