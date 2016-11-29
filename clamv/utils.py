@@ -9,16 +9,7 @@ import warnings
 
 
 def get_images(color=False, min_faces_per_person=70):
-    d = fetch_lfw_people(color=color, min_faces_per_person=min_faces_per_person, resize=1)
-
-    if color:
-        X = d.images
-    else:
-        X = d.data
-
-    y = d.target
-
-    return X, y
+    return fetch_lfw_people(color=color, min_faces_per_person=min_faces_per_person, resize=1)
 
 def score(filename, metric, *args, **kwargs):
     D = np.load(filename + '.npy')
