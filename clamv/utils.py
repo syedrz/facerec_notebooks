@@ -1,6 +1,7 @@
 from sklearn.datasets import fetch_lfw_people
 from sklearn.model_selection import StratifiedKFold
 from sklearn.base import clone
+from sklearn.metrics import accuracy_score
 import numpy as np
 import matplotlib.pyplot as plt
 import time
@@ -17,6 +18,16 @@ def get_images(color=False, min_faces_per_person=70):
     y = d.target
 
     return X, y
+
+def score(filename, metric, *args, **kwargs):
+    D = np.load(filename + '.npy')
+
+    results = []
+
+    for y, y_pred in D:
+        results.append(metric(y, y_pred, *args, **kwargs))
+
+    return np.mean(results), np.std(results)
 
 def test(model, X, y, filename, k=10):
     start = time.time()
@@ -36,6 +47,8 @@ def test(model, X, y, filename, k=10):
     print('end', end, 'duration', end - start)
 
     np.save(filename, results)
+
+    return score(filename, accuracy_score)
 
 def show(img, *args, **kwargs):
     plt.imshow(img.astype(np.uint8), *args, **kwargs)
