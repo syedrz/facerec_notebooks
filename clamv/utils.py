@@ -5,6 +5,7 @@ from sklearn.metrics import accuracy_score
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+import warnings
 
 
 def get_images(color=False, min_faces_per_person=70):
@@ -37,14 +38,16 @@ def test(model, X, y, filename, k=10):
 
     skf = StratifiedKFold(n_splits=k, random_state=42)
 
-    for train, test in skf.split(X, y):
-        m = clone(model)
-        m.fit(X[train], y[train])
-        y_pred = m.predict(X[test])
-        results.append((y[test], y_pred))
+    with warnings.catch_warnings():
+        warnings.filterwarnings('ignore', message='Variables are collinear.')
 
-    end = time.time()
-    print('end', end, 'duration', end - start)
+        for train, test in skf.split(X, y):
+            m = clone(model)
+            m.fit(X[train], y[train])
+            y_pred = m.predict(X[test])
+            results.append((y[test], y_pred))
+
+    print('duration:', time.time() - start)
 
     np.save(filename, results)
 
