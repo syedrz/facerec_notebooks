@@ -36,6 +36,8 @@ def test(model, X, y, filename, k=10):
             m = clone(model)
             m.fit(X[train], y[train])
             y_pred = m.predict(X[test])
+            
+            print("Fold Accuracy:" + accuracy_score(y[test], y_pred))
             results.append((y[test], y_pred))
 
     print('duration:', time.time() - start)
