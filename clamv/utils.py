@@ -33,6 +33,7 @@ def test(model, X, y, filename, k=10):
 
     with warnings.catch_warnings():
         warnings.filterwarnings('ignore', message='Variables are collinear.')
+        warnings.filterwarnings('ignore', message='The priors do not sum to 1. Renormalizing')
 
         for train, test in skf.split(X, y):
             m = clone(model)
@@ -51,7 +52,7 @@ def test(model, X, y, filename, k=10):
 def show(img, *args, **kwargs):
     plt.imshow(img.astype(np.uint8), *args, **kwargs)
 
-def up_to_per_person(y, n=10):
+def up_to_per_person(X, y, n=10):
     out = set()
     d = dict()
 
@@ -66,4 +67,6 @@ def up_to_per_person(y, n=10):
 
     print('classes', len(d))
 
-    return sorted(out)
+    out = sorted(out)
+
+    return X[out], y[out]
