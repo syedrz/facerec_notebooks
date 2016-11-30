@@ -13,14 +13,14 @@ def construct_multiclass_roc_curve(y_true, y_pred, num_classes):
 	# Now take all fpr values
 	all_fpr = []
 	for p in roc_classes:
-		all_fpr = np.concatenate(p[0])
+		all_fpr = np.vstack(p[0])
 
 	all_fpr = np.unique(all_fpr)
 
-	mean_tpr = np.zeros_live(all_fpr)
+	mean_tpr = np.zeros_like(all_fpr)
 
 	for i in range(num_classes):
-		mean_tpr = interp(all_fpr, roc_classes[i][0], roc_classes[i][1])
+		mean_tpr += scipy.interp(all_fpr, roc_classes[i][0], roc_classes[i][1])
 
 	mean_tpr /= num_classes
 
