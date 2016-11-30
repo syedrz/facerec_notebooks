@@ -8,7 +8,7 @@ import time
 import warnings
 
 
-DATA_FOLDER = 'data/'
+DATA_FOLDER = 'results/'
 
 def get_images(color=False, min_faces_per_person=70):
     return fetch_lfw_people(color=color, min_faces_per_person=min_faces_per_person, resize=1)
