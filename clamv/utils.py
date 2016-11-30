@@ -50,3 +50,20 @@ def test(model, X, y, filename, k=10):
 
 def show(img, *args, **kwargs):
     plt.imshow(img.astype(np.uint8), *args, **kwargs)
+
+def up_to_per_person(y, n=10):
+    out = set()
+    d = dict()
+
+    for k, v in enumerate(y):
+        if v in d:
+            d[v] += 1
+        else:
+            d[v] = 1
+
+        if d[v] <= n:
+            out.add(k)
+
+    print('classes', len(d))
+
+    return sorted(out)
