@@ -2,16 +2,64 @@ from sklearn.datasets import fetch_lfw_people
 from sklearn.model_selection import StratifiedKFold
 from sklearn.base import clone
 from sklearn.metrics import accuracy_score
+from scipy.misc import imread, imresize
 import numpy as np
 import matplotlib.pyplot as plt
 import time
 import warnings
-
+import os
 
 DATA_FOLDER = 'results/'
 
 def get_images(color=False, min_faces_per_person=70):
     return fetch_lfw_people(color=color, min_faces_per_person=min_faces_per_person, resize=1)
+
+def get_clamv_images(base_dir='clamv_faces', face_type='face', resize_size=None):
+    X = []
+    y = []
+    
+    classes = {}
+    
+    # Get all the known classes
+    subdir, dirs, files = next(os.walk(base_dir))
+    
+    for i in range(len(dirs)):
+        classes[dirs[i]] = i
+    
+    # Go through each class and get the face type, placing it into X and 
+    for subdir, dirs, files in os.walk(base_dir):
+        split = subdir.split('/')
+        
+        # It's not a directory with images
+        if len(split) != 3:
+            continue
+        
+        # It's not the correct face type
+        if split[2] != face_type:
+            continue
+        
+        for f in files:
+            # Do not use images that are not cutouts
+            if 'face' not in f:
+                continue
+                
+            face_path = os.path.join(subdir, f)
+            
+            img = imread(face_path)
+            X.append(img)
+            
+            y.append(classes[split[1]])
+    
+    
+    if resize_size is not None:
+        new_X = []
+        for x in X:
+            new_X.append(imresize(x, size=resize_size))
+        
+        return np.array(new_X), np.array(y)
+    else:
+        return np.array(X), np.array(y)
+            
 
 def score(filename, metric, *args, **kwargs):
     D = np.load(DATA_FOLDER + filename + '.npy')

@@ -36,6 +36,7 @@ class ColorClassifier(BaseEstimator, ClassifierMixin):
             X_transformed.append(self.transform[i].transform(Xt))
 
         return self.classify.predict(ColorClassifier.flatten(X_transformed))
+    
 
     @staticmethod
     def to_yuv(X):
