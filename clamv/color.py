@@ -4,13 +4,15 @@ import numpy as np
 
 
 class ColorClassifier(BaseEstimator, ClassifierMixin):
-    def __init__(self, transform, classify):
+    def __init__(self, transform, classify, name):
         if type(transform) is list:
             self.transform = transform
         else:
             self.transform = [clone(transform) for i in range(3)]
 
         self.classify = classify
+        
+        self.name = name
 
     def fit(self, X, y):
         X = ColorClassifier.subsample(ColorClassifier.to_yuv(X))
@@ -24,20 +26,38 @@ class ColorClassifier(BaseEstimator, ClassifierMixin):
 
         self.classify.fit(ColorClassifier.flatten(X_transformed), y)
         return self
-
-    def predict(self, X):
-        X = ColorClassifier.subsample(ColorClassifier.to_yuv(X))
-
+    
+    def __transform(self, X):
         X_transformed = []
 
         for i in range(3):
             Xt = X[i]
             Xt = Xt.reshape(Xt.shape[0], Xt.shape[1] * Xt.shape[2])
             X_transformed.append(self.transform[i].transform(Xt))
+         
+        return X_transformed
+    
+    def predict(self, X):
+        X = ColorClassifier.subsample(ColorClassifier.to_yuv(X))
+
+        X_transformed = self.__transform(X)
 
         return self.classify.predict(ColorClassifier.flatten(X_transformed))
     
+    def predict_proba(self, X):
+        X = ColorClassifier.subsample(ColorClassifier.to_yuv(X))
 
+        X_transformed = self.__transform(X)
+
+        return self.classify.predict_proba(ColorClassifier.flatten(X_transformed))
+    
+    def predict_log_proba(self, X):
+        X = ColorClassifier.subsample(ColorClassifier.to_yuv(X))
+
+        X_transformed = self.__transform(X)
+
+        return self.classify.predict_log_proba(ColorClassifier.flatten(X_transformed))
+     
     @staticmethod
     def to_yuv(X):
         rgb2yuv = np.array([[0.299, 0.587, 0.114],
