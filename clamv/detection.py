@@ -19,7 +19,7 @@ class CascadeDetector(Detector):
     def __init__(self, face_cascade):
         self.face_cascade = cv2.CascadeClassifier(face_cascade)
 
-    async def _detect(self, image):
+    def _detect(self, image):
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         faces = self.face_cascade.detectMultiScale(gray)
         for i, (x, y, w, h) in enumerate(faces):
