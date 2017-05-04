@@ -14,8 +14,8 @@ from skimage.transform import resize
 # Load the dataset
 y = []
 X = []
-for path in glob('../../final_dataset/*/*'):
-    _, _, _, y1, name = path.split('/')
+for path in glob('../final_dataset/*/*'):
+    _, _, y1, name = path.split('/')
     x1 = cv2.imread(path)
     
     y.append(y1)
@@ -61,5 +61,5 @@ sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='binary_crossentropy', optimizer='rmsprop',
               metrics=['accuracy'])
 
-model.fit(resized_X, y, batch_size=32, epochs=10)
+model.fit(resized_X, y, batch_size=32, epochs=15)
 model.save('cnn.h5')
